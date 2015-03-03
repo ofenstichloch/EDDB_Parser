@@ -6,9 +6,11 @@ public class DataParser {
 	private JsonParser reader;
 	private FileReader file;
 	private DBWorker dbworker;
+	private int count;
 	
 	public DataParser(String filepath, int mode){
 		boolean go = true;
+		count = 0;
 		try {
 			file = new FileReader(new File(filepath));
 			reader = new JsonParser(file);
@@ -88,10 +90,14 @@ public class DataParser {
 				sys.eco = reader.nextOptionalString();
 			reader.endObject();
 			dbworker.insertSystemData(sys);
+			count++;
+			if(count%100==0){java.lang.System.out.println(count);}
+			
 			
 		}
 		reader.endArray();
 		reader.close();
+		
 	}
 	
 	/**
@@ -186,6 +192,8 @@ public class DataParser {
 					data.timestamp = reader.nextOptionalLong();
 					reader.endObject();
 					dbworker.insertMarketData(data);
+					count++;
+					if(count%100==0){java.lang.System.out.println(count);}
 				}
 				reader.endArray();
 			reader.endObject();
@@ -214,7 +222,8 @@ public class DataParser {
 					comm.category = reader.nextOptionalString();
 				reader.endObject();
 			reader.endObject();
-			comm.print();
+			count++;
+			if(count%100==0){java.lang.System.out.println(count);}
 		}
 	
 		reader.endArray();

@@ -39,6 +39,7 @@ public class DBWorker {
 			statement.setLong(14, data.timestamp);
 			statement.setBoolean(15, true);
 			statement.executeUpdate();
+			statement.close();
 			return true;
 		}catch (SQLException e){
 			java.lang.System.out.println(e);
