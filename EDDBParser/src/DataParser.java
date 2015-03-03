@@ -24,6 +24,28 @@ public class DataParser {
 		catch(IOException e){java.lang.System.out.println(e);}
 	}
 	
+	/**
+	 * Parses the EDDB Systems.json
+	 * Expecting this schema:
+	 * 	[
+			{
+				"id":int,
+				"name":string,
+				"x":double,
+				"y":double,
+				"z":double,
+				"faction":string or null,		
+				"population":long or null,
+				"government":string or null,
+				"allegiance":string or null,
+				"state":string or null,
+				"security":string or null,
+				"primary_economy":string or null
+			}
+		]		
+	 * All fields are required
+	 * @throws IOException
+	 */
 	public void parseSystems() throws IOException{
 		reader.beginArray();
 		while(reader.hasNext()){
@@ -59,6 +81,45 @@ public class DataParser {
 		reader.close();
 	}
 	
+	/**
+	 * Expected schema:
+	 * [
+			{
+			"id":int,
+			"name":string,
+			"system_id":int,
+			"max_landing_pad_size":int or null,
+			"distance_to_star":int or null,
+			"faction":string or null,		skipped
+			"government":string or null,	skipped
+			"allegiance":string or null,	skipped
+			"state":string or null,			skipped
+			"type":string or null,			skipped
+			"has_blackmarket":int or null,	skipped
+			"has_commodities":int or null,	skipped
+			"has_refuel":int or null,		skipped
+			"has_repair":int or null,		skipped
+			"has_rearm":int or null,		skipped
+			"has_outfitting":int or null,	skipped
+			"has_shipyard":int or null,		skipped
+			"import_commodities":[],		skipped
+			"export_commodities":[],		skipped
+			"prohibited_commodities":[],	skipped
+			"economies":[],					skipped
+			"listings":[{
+				"id":int,
+				"station_id":int,
+				"commodity_id":int,
+				"supply":int,
+				"buy_price":int,
+				"sell_price":int,
+				"demand":int,
+				"collected_at":long
+				}]
+			}
+		]
+	 * @throws IOException
+	 */
 	public void parseStations() throws IOException{
 		reader.beginArray();
 		while(reader.hasNext()){
@@ -108,7 +169,8 @@ public class DataParser {
 					data.sellPrice = reader.nextOptionalInt();
 					reader.skipValue();
 					data.demand = reader.nextOptionalInt();
-					reader.skipValue();reader.skipValue();
+					reader.skipValue();
+					data.timestamp = reader.nextOptionalLong();
 					reader.endObject();
 				}
 				reader.endArray();

@@ -11,7 +11,7 @@ public class MarketData {
 	public Integer supply;
 	public Integer sellPrice;
 	public Integer demand;
-	public String timestamp;
+	public long timestamp;
 	
 	public void print(){
 		java.lang.System.out.println(eddbCommodityID + " " +eddbStationID + " "+ buyPrice);
