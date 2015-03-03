@@ -3,9 +3,9 @@ public class Main {
 
 	public static void main(String[] args) {
 		DataParser  parse;
-		parse = new DataParser("C:\\Users\\Alex\\Downloads\\EDDB\\test.json",2);
-		//parse = new DataParser("C:\\Users\\Alex\\Downloads\\EDDB\\commodities.json",1);
-		//parse = new DataParser("C:\\Users\\Alex\\Downloads\\EDDB\\systems.json",0);
+		parse = new DataParser("stations.json",2);
+		//parse = new DataParser("commodities.json",1);
+		//parse = new DataParser("systems.json",0);
 	}
 
 }

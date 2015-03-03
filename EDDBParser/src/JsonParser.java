@@ -20,6 +20,7 @@ public class JsonParser extends JsonReader {
 			}else if(peek == JsonToken.NUMBER){
 				return this.nextInt();
 			}else{
+				java.lang.System.out.println("NULL/NUMBER "+this.nextString());
 				return -2;
 			}
 		} catch (IOException e) {
@@ -36,6 +37,7 @@ public class JsonParser extends JsonReader {
 				this.skipValue();
 				return "";
 			}else{
+				java.lang.System.out.println("NULL/STRING "+this.nextString());
 				return "SCHEISSE";
 			}
 		} catch (IOException e) {
@@ -52,6 +54,7 @@ public class JsonParser extends JsonReader {
 			}else if(peek == JsonToken.NUMBER){
 				return this.nextLong();
 			}else{
+				java.lang.System.out.println(this.nextString());
 				return -2;
 			}
 		} catch (IOException e) {

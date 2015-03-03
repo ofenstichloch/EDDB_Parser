@@ -21,7 +21,7 @@ public class DataParser {
 		else if (mode==1){parseCommodities();}
 		else if (mode==2){parseStations();}
 		}
-		catch(IOException e){}
+		catch(IOException e){java.lang.System.out.println(e);}
 	}
 	
 	public void parseSystems() throws IOException{
@@ -51,7 +51,6 @@ public class DataParser {
 				sys.state = reader.nextOptionalString();
 				reader.skipValue();
 				sys.security = reader.nextOptionalString();
-				reader.skipValue();
 				sys.eco = reader.nextOptionalString();
 			reader.endObject();
 			sys.print();
@@ -72,7 +71,7 @@ public class DataParser {
 				reader.skipValue();
 				station.eddbSystemID = reader.nextInt();
 				reader.skipValue();
-				station.maxLandingPadSize = reader.nextOptionalString();
+				station.maxLandingPadSize = reader.nextOptionalInt();
 				reader.skipValue();
 				station.distanceToStar = reader.nextOptionalLong();
 				reader.skipValue();reader.skipValue(); //faction
@@ -113,8 +112,7 @@ public class DataParser {
 					reader.endObject();
 				}
 				reader.endArray();
-				reader.endObject();
-			
+			reader.endObject();
 		}
 		reader.endArray();
 		reader.close();
