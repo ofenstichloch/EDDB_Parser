@@ -1,27 +1,38 @@
-import com.google.gson.*;
-import com.google.gson.stream.JsonReader;
-
 import java.io.*;
+import java.sql.SQLException;
 
 public class DataParser {
 
 	private JsonParser reader;
 	private FileReader file;
+	private DBWorker dbworker;
 	
 	public DataParser(String filepath, int mode){
+		boolean go = true;
 		try {
 			file = new FileReader(new File(filepath));
 			reader = new JsonParser(file);
-		} catch (FileNotFoundException e) {
 			
+		} catch (FileNotFoundException e) {
+			go=false;
 			e.printStackTrace();
 		}
-		try{
-		if(mode==0){parseSystems();}
-		else if (mode==1){parseCommodities();}
-		else if (mode==2){parseStations();}
+
+		try {
+			dbworker = new DBWorker();
+		} catch (SQLException e1) {
+			go=false;
+			e1.printStackTrace();
 		}
-		catch(IOException e){java.lang.System.out.println(e);}
+		
+		if(go){
+			try{
+			if(mode==0){parseSystems();}
+			else if (mode==1){parseCommodities();}
+			else if (mode==2){parseStations();}
+			}
+			catch(IOException e){java.lang.System.out.println(e);}
+		}
 	}
 	
 	/**
@@ -73,9 +84,11 @@ public class DataParser {
 				sys.state = reader.nextOptionalString();
 				reader.skipValue();
 				sys.security = reader.nextOptionalString();
+				reader.skipValue();
 				sys.eco = reader.nextOptionalString();
 			reader.endObject();
-			sys.print();
+			dbworker.insertSystemData(sys);
+			
 		}
 		reader.endArray();
 		reader.close();
@@ -172,6 +185,7 @@ public class DataParser {
 					reader.skipValue();
 					data.timestamp = reader.nextOptionalLong();
 					reader.endObject();
+					dbworker.insertMarketData(data);
 				}
 				reader.endArray();
 			reader.endObject();
