@@ -21,23 +21,22 @@ public class DBWorker {
 		try{
 			PreparedStatement statement = 
 					conn.prepareStatement("INSERT INTO MarketData "
-							+ "(eddbSystemID, eddbStationID, eddbCommodityID, buyPrice, sellPrice, supply, demand, timestamp, eddb) "
+							+ "(eddbStationID, eddbCommodityID, buyPrice, sellPrice, supply, demand, timestamp, eddb) "
 							+ "VALUES (?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE buyPrice=?, sellPrice=?, supply=?, demand=?, timestamp=?, eddb=?");
-			statement.setInt(1, data.eddbSystemID);
-			statement.setInt(2, data.eddbStationID);
-			statement.setInt(3, data.eddbCommodityID);
-			statement.setInt(4, data.buyPrice);
-			statement.setInt(5, data.sellPrice);
-			statement.setInt(6, data.supply);
-			statement.setInt(7, data.demand);
-			statement.setLong(8, data.timestamp);
-			statement.setBoolean(9, true);
-			statement.setInt(10, data.buyPrice);
-			statement.setInt(11, data.sellPrice);
-			statement.setInt(12, data.supply);
-			statement.setInt(13, data.demand);
-			statement.setLong(14, data.timestamp);
-			statement.setBoolean(15, true);
+			statement.setInt(1, data.eddbStationID);
+			statement.setInt(2, data.eddbCommodityID);
+			statement.setInt(3, data.buyPrice);
+			statement.setInt(4, data.sellPrice);
+			statement.setInt(5, data.supply);
+			statement.setInt(6, data.demand);
+			statement.setLong(7, data.timestamp);
+			statement.setBoolean(8, true);
+			statement.setInt(9, data.buyPrice);
+			statement.setInt(10, data.sellPrice);
+			statement.setInt(11, data.supply);
+			statement.setInt(12, data.demand);
+			statement.setLong(13, data.timestamp);
+			statement.setBoolean(14, true);
 			statement.executeUpdate();
 			statement.close();
 			return true;
@@ -117,10 +116,12 @@ public class DBWorker {
 			statement.executeUpdate();
 			statement.close();
 			
-			statement = conn.prepareStatement("INSERT INTO categories (eddbID, name) VALUES (?,?) ON DUPLICATE KEY UPDATE name=?");
+			statement = conn.prepareStatement("INSERT INTO Categories (eddbID, name) VALUES (?,?) ON DUPLICATE KEY UPDATE name=?");
 			statement.setInt(1, com.categoryID);
 			statement.setString(2, com.category);
 			statement.setString(3, com.category);
+			statement.executeUpdate();
+			statement.close();
 			return true;
 		}catch (SQLException e){
 			java.lang.System.out.println(e);
