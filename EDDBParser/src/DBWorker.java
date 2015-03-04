@@ -62,6 +62,7 @@ public class DBWorker {
 			statement.setDouble(8, sys.y);
 			statement.setDouble(9, sys.z);
 			statement.executeUpdate();
+			statement.close();
 			return true;
 		}catch (SQLException e){
 			java.lang.System.out.println(e);
@@ -69,5 +70,61 @@ public class DBWorker {
 		return false;
 		
 	}
+
+	public boolean insertStationData(Station station) {
+		
+		try{
+			PreparedStatement statement = 
+					conn.prepareStatement("INSERT INTO Stations (eddbID, eddbSystemID, name, maxLandingPadSize, distanceToStar, faction, hasBlackmarket, hasRefuel, hasRepair) VALUES (?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE name=?,maxLandingPadSize=?,distanceToStar=?,faction=?,hasBlackmarket=?,hasRefuel=?,hasRepair=?");
+			
+			statement.setInt(1, station.eddbID);
+			statement.setInt(2, station.eddbSystemID);
+			statement.setString(3, station.name);
+			statement.setInt(4, station.maxLandingPadSize);
+			statement.setLong(5, station.distanceToStar);
+			statement.setString(6, station.faction);
+			statement.setBoolean(7, station.hasBlackmarket);
+			statement.setBoolean(8, station.hasRefuel);
+			statement.setBoolean(9, station.hasRepair);
+			statement.setString(10, station.name);
+			statement.setInt(11, station.maxLandingPadSize);
+			statement.setLong(12, station.distanceToStar);
+			statement.setString(13, station.faction);
+			statement.setBoolean(14, station.hasBlackmarket);
+			statement.setBoolean(15, station.hasRefuel);
+			statement.setBoolean(16, station.hasRepair);
+			statement.executeUpdate();
+			statement.close();
+			return true;
+		}catch (SQLException e){
+			java.lang.System.out.println(e);
+		}
+		return false;
+	}
 	
+	public boolean insertCommodityData(Commodity com){
+		try{
+			PreparedStatement statement = 
+					conn.prepareStatement("INSERT INTO Commodities (eddbID, name, average, categoryID) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE name=?,average=?, categoryID=?");
+			
+			statement.setInt(1, com.eddbID);
+			statement.setString(2, com.name);
+			statement.setInt(3, com.average);
+			statement.setInt(4, com.categoryID);
+			statement.setString(5, com.name);
+			statement.setInt(6, com.average);
+			statement.setInt(7, com.categoryID);
+			statement.executeUpdate();
+			statement.close();
+			
+			statement = conn.prepareStatement("INSERT INTO categories (eddbID, name) VALUES (?,?) ON DUPLICATE KEY UPDATE name=?");
+			statement.setInt(1, com.categoryID);
+			statement.setString(2, com.category);
+			statement.setString(3, com.category);
+			return true;
+		}catch (SQLException e){
+			java.lang.System.out.println(e);
+		}
+		return false;
+	}
 }

@@ -172,6 +172,7 @@ public class DataParser {
 				reader.skipValue();reader.skipValue(); //ecos
 				reader.skipValue();
 				reader.beginArray();
+				dbworker.insertStationData(station);
 				while(reader.hasNext()){
 					MarketData data = new MarketData();
 					data.eddbStationID = station.eddbID;
@@ -217,11 +218,12 @@ public class DataParser {
 				reader.skipValue();
 				reader.beginObject();
 					reader.skipValue();
-					reader.skipValue();
+					comm.categoryID = reader.nextInt();
 					reader.skipValue();
 					comm.category = reader.nextOptionalString();
 				reader.endObject();
 			reader.endObject();
+			dbworker.insertCommodityData(comm);
 			count++;
 			if(count%100==0){java.lang.System.out.println(count);}
 		}
