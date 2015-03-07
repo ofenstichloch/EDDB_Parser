@@ -22,7 +22,7 @@ public class DBWorker {
 			PreparedStatement statement = 
 					conn.prepareStatement("INSERT INTO MarketData "
 							+ "(eddbStationID, eddbCommodityID, buyPrice, sellPrice, supply, demand, timestamp, eddb) "
-							+ "VALUES (?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE buyPrice=?, sellPrice=?, supply=?, demand=?, timestamp=?, eddb=?");
+							+ "VALUES (?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE buyPrice=?, sellPrice=?, supply=?, demand=?, timestamp=?, eddb=?");
 			statement.setInt(1, data.eddbStationID);
 			statement.setInt(2, data.eddbCommodityID);
 			statement.setInt(3, data.buyPrice);
@@ -97,6 +97,7 @@ public class DBWorker {
 			return true;
 		}catch (SQLException e){
 			java.lang.System.out.println(e);
+			java.lang.System.out.println(station.hasRefuel);
 		}
 		return false;
 	}

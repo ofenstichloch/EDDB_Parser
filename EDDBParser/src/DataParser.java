@@ -6,11 +6,9 @@ public class DataParser {
 	private JsonParser reader;
 	private FileReader file;
 	private DBWorker dbworker;
-	private int count;
-	
+
 	public DataParser(String filepath, int mode){
 		boolean go = true;
-		count = 0;
 		try {
 			file = new FileReader(new File(filepath));
 			reader = new JsonParser(file);
@@ -90,9 +88,7 @@ public class DataParser {
 				sys.eco = reader.nextOptionalString();
 			reader.endObject();
 			dbworker.insertSystemData(sys);
-			count++;
-			if(count%100==0){java.lang.System.out.println(count);}
-			
+
 			
 		}
 		reader.endArray();
@@ -144,62 +140,122 @@ public class DataParser {
 		while(reader.hasNext()){
 			Station station = new Station();
 			reader.beginObject();
-				reader.skipValue();
-				station.eddbID = reader.nextInt();
-				reader.skipValue();
-				station.name = reader.nextString();
-				reader.skipValue();
-				station.eddbSystemID = reader.nextInt();
-				reader.skipValue();
-				station.maxLandingPadSize = reader.nextOptionalInt();
-				reader.skipValue();
-				station.distanceToStar = reader.nextOptionalLong();
-				reader.skipValue();reader.skipValue(); //faction
-				reader.skipValue();reader.skipValue(); //gov
-				reader.skipValue();reader.skipValue(); //allegiance
-				reader.skipValue();reader.skipValue(); //state
-				reader.skipValue();reader.skipValue(); //type
-				reader.skipValue();reader.skipValue(); //BM
-				reader.skipValue();reader.skipValue(); //Commodities
-				reader.skipValue();reader.skipValue(); // Refuel
-				reader.skipValue();reader.skipValue(); //Repair
-				reader.skipValue();reader.skipValue(); //Rearm
-				reader.skipValue();reader.skipValue(); //outfitting
-				reader.skipValue();reader.skipValue(); //shipyard
-				reader.skipValue();reader.skipValue(); //import Comm
-				reader.skipValue();reader.skipValue(); //export comm
-				reader.skipValue();reader.skipValue(); //prohibited comm
-				reader.skipValue();reader.skipValue(); //ecos
-				reader.skipValue();
-				reader.beginArray();
-				dbworker.insertStationData(station);
 				while(reader.hasNext()){
-					MarketData data = new MarketData();
-					data.eddbStationID = station.eddbID;
-					reader.beginObject();
-					reader.skipValue();reader.skipValue();
-					reader.skipValue();reader.skipValue();
-					reader.skipValue();
-					data.eddbCommodityID = reader.nextInt();
-					reader.skipValue();
-					data.supply = reader.nextOptionalInt();
-					reader.skipValue();
-					data.buyPrice = reader.nextOptionalInt();
-					reader.skipValue();
-					data.sellPrice = reader.nextOptionalInt();
-					reader.skipValue();
-					data.demand = reader.nextOptionalInt();
-					reader.skipValue();
-					data.timestamp = reader.nextOptionalLong();
-					reader.endObject();
-					dbworker.insertMarketData(data);
-					count++;
-					if(count%100==0){java.lang.System.out.println(count);}
+					int tmp;
+					switch (reader.nextName()) {
+					case "id":
+						station.eddbID = reader.nextInt();
+						break;
+					case "name":
+						station.name = reader.nextString();
+						break;
+					case "system_id":
+						station.eddbSystemID = reader.nextInt();
+						break;
+					case "max_landing_pad_size":
+						station.maxLandingPadSize = reader.nextOptionalInt();
+						break;
+					case "distance_to_star":
+						station.distanceToStar = reader.nextOptionalLong();
+						break;
+					case "faction":
+						station.faction = reader.nextOptionalString();
+						break;
+					case "government":
+						station.gov = reader.nextOptionalString(); 
+						break;
+					case "allegiance":
+						station.allegiance = reader.nextOptionalString();
+						break;
+					case "state":
+						station.state = reader.nextOptionalString();
+						break;
+					case "type":
+						station.type = reader.nextOptionalString();
+						break;
+					case "has_blackmarket":
+						tmp = reader.nextOptionalInt();
+						if(tmp < 1){station.hasBlackmarket = false;}
+						else{station.hasBlackmarket = true;}
+						break;
+					case "has_commodities":
+						tmp = reader.nextOptionalInt();
+						if(tmp < 1){station.hasCommodities= false;}
+						else{station.hasCommodities = true;}
+						break;
+					case "has_refuel":
+						tmp = reader.nextOptionalInt();
+						if(tmp < 1){station.hasRefuel= false;}
+						else{station.hasRefuel = true;}
+						break;
+					case "has_repair":
+						tmp = reader.nextOptionalInt();
+						if(tmp < 1){station.hasRepair= false;}
+						else{station.hasRepair = true;}
+						break;
+					case "has_rearm":
+						tmp = reader.nextOptionalInt();
+						if(tmp < 1){station.hasRearm= false;}
+						else{station.hasRearm = true;}
+						break;
+					case "has_outfitting":
+						tmp = reader.nextOptionalInt();
+						if(tmp < 1){station.hasOutfitting= false;}
+						else{station.hasOutfitting = true;}
+						break;
+					case "has_shipyard":
+						tmp = reader.nextOptionalInt();
+						if(tmp < 1){station.hasShipyard= false;}
+						else{station.hasShipyard = true;}
+						break;
+					case "import_commodities":
+						reader.skipValue();
+						break;
+					case "export_commodities":
+						reader.skipValue();
+						break;
+					case "prohibited_commodities":
+						reader.skipValue();
+						break;
+					case "economies":
+						reader.skipValue();
+						break;
+					case "listings":
+						reader.beginArray();
+						dbworker.insertStationData(station);
+						while(reader.hasNext()){
+							MarketData data = new MarketData();
+							data.eddbStationID = station.eddbID;
+							reader.beginObject();
+							reader.skipValue();reader.skipValue();
+							reader.skipValue();reader.skipValue();
+							reader.skipValue();
+							data.eddbCommodityID = reader.nextInt();
+							reader.skipValue();
+							data.supply = reader.nextOptionalInt();
+							reader.skipValue();
+							data.buyPrice = reader.nextOptionalInt();
+							reader.skipValue();
+							data.sellPrice = reader.nextOptionalInt();
+							reader.skipValue();
+							data.demand = reader.nextOptionalInt();
+							reader.skipValue();
+							data.timestamp = reader.nextOptionalLong();
+							reader.endObject();
+							dbworker.insertMarketData(data);
+						}
+						reader.endArray();
+						break;
+					default:
+						reader.skipValue();
+						break;
+					}
+
 				}
-				reader.endArray();
 			reader.endObject();
 		}
 		reader.endArray();
+		
 		reader.close();
 	}
 	
@@ -224,8 +280,6 @@ public class DataParser {
 				reader.endObject();
 			reader.endObject();
 			dbworker.insertCommodityData(comm);
-			count++;
-			if(count%100==0){java.lang.System.out.println(count);}
 		}
 	
 		reader.endArray();
