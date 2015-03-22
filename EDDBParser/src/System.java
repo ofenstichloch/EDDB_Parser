@@ -12,6 +12,7 @@ public class System {
 	public String state;
 	public String security;
 	public String eco;
+	public int permit;
 	
 	public void print(){
 		java.lang.System.out.println(name+" "+x+" "+y+" "+z+" "+faction+" "+population+" "+gov+" "+allegiance+" "+state+" "+security+" "+eco);

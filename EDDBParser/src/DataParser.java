@@ -62,30 +62,56 @@ public class DataParser {
 		while(reader.hasNext()){
 			System sys = new System();
 			reader.beginObject();
-				reader.skipValue();
-				sys.eddbID = reader.nextInt();
-				reader.skipValue();
-				sys.name = reader.nextString();
-				reader.skipValue();
-				sys.x = reader.nextDouble();
-				reader.skipValue();
-				sys.y = reader.nextDouble();
-				reader.skipValue();
-				sys.z = reader.nextDouble();
-				reader.skipValue();
-				sys.faction = reader.nextOptionalString();
-				reader.skipValue();
-				sys.population = reader.nextOptionalLong();
-				reader.skipValue();
-				sys.gov = reader.nextOptionalString();
-				reader.skipValue();
-				sys.allegiance = reader.nextOptionalString();
-				reader.skipValue();
-				sys.state = reader.nextOptionalString();
-				reader.skipValue();
-				sys.security = reader.nextOptionalString();
-				reader.skipValue();
-				sys.eco = reader.nextOptionalString();
+				while(reader.hasNext()){
+					switch(reader.nextName()){
+					case "id":
+						sys.eddbID = reader.nextInt();
+						break;
+					case "name":
+						sys.name = reader.nextString();
+						break;
+					case "x":
+						sys.x = reader.nextDouble();
+						break;
+					case "y":
+						sys.y = reader.nextDouble();
+						break;
+					case "z":
+						sys.z = reader.nextDouble();
+						break;
+					case "faction":
+						sys.faction = reader.nextOptionalString();
+						break;
+					case "population":
+						sys.population = reader.nextOptionalLong();
+						break;
+					case "government":
+						sys.gov = reader.nextOptionalString();
+						break;
+					case "allegiance":
+						sys.allegiance = reader.nextOptionalString();
+						break;
+					case "state":
+						sys.state = reader.nextOptionalString();
+						break;
+					case "security":
+						sys.security = reader.nextOptionalString();
+						break;
+					case "primary_economy":
+						sys.eco = reader.nextOptionalString();
+						break;
+					case "needs_permit":
+						sys.permit = reader.nextOptionalInt();
+						break;
+					case "updated_at":
+						reader.skipValue();
+						break;
+					default:
+						reader.skipValue();
+						break;
+					}
+				}
+
 			reader.endObject();
 			dbworker.insertSystemData(sys);
 
@@ -93,6 +119,7 @@ public class DataParser {
 		}
 		reader.endArray();
 		reader.close();
+		java.lang.System.out.println("Systems done");
 		
 	}
 	
@@ -227,20 +254,41 @@ public class DataParser {
 							MarketData data = new MarketData();
 							data.eddbStationID = station.eddbID;
 							reader.beginObject();
-							reader.skipValue();reader.skipValue();
-							reader.skipValue();reader.skipValue();
-							reader.skipValue();
-							data.eddbCommodityID = reader.nextInt();
-							reader.skipValue();
-							data.supply = reader.nextOptionalInt();
-							reader.skipValue();
-							data.buyPrice = reader.nextOptionalInt();
-							reader.skipValue();
-							data.sellPrice = reader.nextOptionalInt();
-							reader.skipValue();
-							data.demand = reader.nextOptionalInt();
-							reader.skipValue();
-							data.timestamp = reader.nextOptionalLong();
+							while(reader.hasNext()){
+								switch(reader.nextName()){
+								case "id":
+									reader.skipValue();
+									break;
+								case "station_id":
+									reader.skipValue();
+									break;
+								case "commodity_id":
+									data.eddbCommodityID = reader.nextInt();
+									break;
+								case "supply":
+									data.supply = reader.nextOptionalInt();
+									break;
+								case "buy_price":
+									data.buyPrice = reader.nextOptionalInt();
+									break;
+								case "demand":
+									data.demand = reader.nextOptionalInt();
+									break;
+								case "sell_price":
+									data.sellPrice = reader.nextOptionalInt();
+									break;
+								case "collected_at":
+									data.timestamp = reader.nextOptionalLong();
+									break;
+								case "update_count":
+									reader.skipValue();
+									break;
+								default:
+									reader.skipValue();
+									break;
+								}
+							}
+					
 							reader.endObject();
 							dbworker.insertMarketData(data);
 						}
