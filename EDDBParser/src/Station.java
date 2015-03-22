@@ -3,7 +3,7 @@ public class Station {
 	public String name;
 	public int eddbSystemID;
 	public int eddbID;
-	public int maxLandingPadSize;
+	public String maxLandingPadSize;
 	public long distanceToStar;
 	public String faction;
 	public String gov;

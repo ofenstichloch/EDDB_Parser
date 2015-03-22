@@ -79,14 +79,14 @@ public class DBWorker {
 			statement.setInt(1, station.eddbID);
 			statement.setInt(2, station.eddbSystemID);
 			statement.setString(3, station.name);
-			statement.setInt(4, station.maxLandingPadSize);
+			statement.setString(4, station.maxLandingPadSize);
 			statement.setLong(5, station.distanceToStar);
 			statement.setString(6, station.faction);
 			statement.setBoolean(7, station.hasBlackmarket);
 			statement.setBoolean(8, station.hasRefuel);
 			statement.setBoolean(9, station.hasRepair);
 			statement.setString(10, station.name);
-			statement.setInt(11, station.maxLandingPadSize);
+			statement.setString(11, station.maxLandingPadSize);
 			statement.setLong(12, station.distanceToStar);
 			statement.setString(13, station.faction);
 			statement.setBoolean(14, station.hasBlackmarket);

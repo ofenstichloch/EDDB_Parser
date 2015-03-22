@@ -153,7 +153,7 @@ public class DataParser {
 						station.eddbSystemID = reader.nextInt();
 						break;
 					case "max_landing_pad_size":
-						station.maxLandingPadSize = reader.nextOptionalInt();
+						station.maxLandingPadSize = reader.nextOptionalString();
 						break;
 					case "distance_to_star":
 						station.distanceToStar = reader.nextOptionalLong();
